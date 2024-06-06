@@ -1,3 +1,5 @@
+export { initialCards }
+
 const initialCards = [
     {
       name: "Данакиль",
@@ -20,7 +22,7 @@ const initialCards = [
       link: "https://images.unsplash.com/photo-1671904597069-00b075ab278a?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     },
     {
-      name: "Сад Богов",
-      link: "https://images.unsplash.com/photo-1597413134301-80646fc15e9d?q=80&w=1767&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      name: "Продавец хурмы",
+      link: "https://i.pinimg.com/564x/3e/ed/11/3eed1103c548ed7c46a1e37a2695f53a.jpg",
     }
 ];
