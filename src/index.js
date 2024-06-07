@@ -8,7 +8,7 @@
 
 import './pages/index.css'; 
 import { initialCards } from './scripts/cards.js';
-import { openModal, closeModal, closeModalByClick, closeModalOnEsc } from './components/modal.js';
+import { openModal, closeModal, closeModalByClick } from './components/modal.js';
 import { createCard, deleteCard, likeCard } from './components/card.js';
 
 const placesList = document.querySelector('.places__list');
@@ -17,6 +17,7 @@ const popupNewCard = document.querySelector('.popup_type_new-card');
 const profileEditButton = document.querySelector('.profile__edit-button');
 const newCardButton = document.querySelector('.profile__add-button');
 const imageModal = document.querySelector('.popup_type_image');
+const popupImage = document.querySelector('.popup__image');
 const editProfileForm = popupEdit.querySelector('.popup__form');
 const newCardForm = popupNewCard.querySelector('.popup__form');
 const nameInput = document.querySelector('.popup__input_type_name');
@@ -40,27 +41,20 @@ function addCardToList(name, link) {
     placesList.prepend(card);
 };
 
-function handleOpenModal(evt) {
-    document.addEventListener('keydown', closeModalOnEsc);
-    switch(evt.target) {
-        case profileEditButton:
-            nameInput.value = profileName.textContent;
-            descriptionInput.value = profileDescription.textContent;
-            openModal(popupEdit);
-            break;
-        case newCardButton:
-            openModal(popupNewCard);
-            break;
-    }
-};
+profileEditButton.addEventListener('click', function () {
+    nameInput.value = profileName.textContent;
+    descriptionInput.value = profileDescription.textContent;
+    openModal(popupEdit);
+});
+
+newCardButton.addEventListener('click', function (){
+    openModal(popupNewCard);
+});
 
 function openImageFunc(evt) {
-    const imageModal = document.querySelector('.popup_type_image');
-    const popupImage = document.querySelector('.popup__image');
     const popupCaption = document.querySelector('.popup__caption');
     const cardImage = evt.target.getAttribute('src');
     const cardCaption = evt.target.getAttribute('alt');
-    document.addEventListener('keydown', closeModalOnEsc);
     openModal(imageModal);
     popupImage.setAttribute('src', cardImage);
     popupImage.setAttribute('alt', cardCaption);
@@ -81,8 +75,6 @@ function handleCardFormSubmit(evt) {
     newCardForm.reset();
 };
 
-profileEditButton.addEventListener('click', handleOpenModal);
-newCardButton.addEventListener('click', handleOpenModal);
 popupEdit.addEventListener('click', closeModalByClick);
 popupNewCard.addEventListener('click', closeModalByClick);
 imageModal.addEventListener('click', closeModalByClick);

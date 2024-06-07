@@ -3,12 +3,12 @@
 export function openModal(popup) {
     popup.classList.add('popup_is-opened');
     popup.classList.add('popup_is-animated');
-    document.addEventListener('keydown', popup);
+    document.addEventListener('keydown', closeModalOnEsc);
 };
 
 export function closeModal(popup) {
     popup.classList.remove('popup_is-opened');
-    document.removeEventListener('keydown', closeModal);
+    document.removeEventListener('keydown', closeModalOnEsc);
 };
 
 export function closeModalByClick(evt) {
@@ -17,7 +17,7 @@ export function closeModalByClick(evt) {
     }
 };
 
-export function closeModalOnEsc(evt) {
+function closeModalOnEsc(evt) {
     if (evt.key === 'Escape') {
         const popupElement = document.querySelector('.popup_is-opened');
         closeModal(popupElement);

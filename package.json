@@ -10,9 +10,7 @@
   "author": "stacey kremer",
   "license": "ISC",
   "dependencies": {
-    "core-js": "^3.37.1",
-    "jquery": "^3.7.1",
-    "url-loader": "^4.1.1"
+    "core-js": "^3.37.1"
   },
   "devDependencies": {
     "@babel/core": "^7.24.6",
