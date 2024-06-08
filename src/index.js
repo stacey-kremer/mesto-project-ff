@@ -26,6 +26,7 @@ const profileName = document.querySelector('.profile__title');
 const profileDescription = document.querySelector('.profile__description');
 const placeName = document.querySelector('.popup__input_type_card-name');
 const placeLink = document.querySelector('.popup__input_type_url');
+const popupCaption = document.querySelector('.popup__caption');
 
 function createCards() {
     initialCards.forEach(function(card) {
@@ -52,7 +53,6 @@ newCardButton.addEventListener('click', function (){
 });
 
 function openImageFunc(evt) {
-    const popupCaption = document.querySelector('.popup__caption');
     const cardImage = evt.target.getAttribute('src');
     const cardCaption = evt.target.getAttribute('alt');
     openModal(imageModal);
