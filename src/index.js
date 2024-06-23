@@ -1,15 +1,8 @@
-// Что тут?
-// Тут объявления и инициализация глобальных констант и переменных с DOM-элементами страницы
-// Тут обработчики событий (при открытии и закрытии попапов; 
-// Обработчики событий при отправке форм; 
-// Обработчик, открывающий попап при клике по изображению карточки);
-// Тут вызовы других функций, подключённых из созданных модулей, которым нужно будет передавать объявленные здесь переменные и обработчики.
-// Вызов функции создания карточки должен находиться - здесь
-
-import './pages/index.css'; 
-import { initialCards } from './scripts/cards.js';
+import './pages/index.css';
 import { openModal, closeModal, closeModalByClick } from './components/modal.js';
 import { createCard, deleteCard, likeCard } from './components/card.js';
+import { enableValidation, validationConfig } from "./scripts/validation";
+import { getInitialCards, getUserData, updateAvatar } from "./scripts/api.js";
 
 const placesList = document.querySelector('.places__list');
 const popupEdit = document.querySelector('.popup_type_edit');
@@ -27,18 +20,43 @@ const profileDescription = document.querySelector('.profile__description');
 const placeName = document.querySelector('.popup__input_type_card-name');
 const placeLink = document.querySelector('.popup__input_type_url');
 const popupCaption = document.querySelector('.popup__caption');
+const profileAvatar = document.querySelector('.profile__image');
+const popupEditAvatar = document.querySelector('.popup_type-avatar');
+const avatarForm = popupEditAvatar.querySelector('.popup__form');
+const avatarInput = document.querySelector('.popup__input_type_url');
+const popupAvatarButton = document.querySelector('.popup__close');
 
-function createCards() {
-    initialCards.forEach(function(card) {
-        const cardElement = createCard(card, deleteCard, likeCard, openImageFunc);
-        placesList.append(cardElement);
-    });
-};
+export let userId = "";
+export let userAvatar = "";
 
-createCards();
+Promise.all([getUserData(), getInitialCards()])
+
+    .then(([profileData, cardData]) => {
+        const userId = profileData._id;
+        profileName.textContent = profileData.name;
+        profileDescription.textContent = profileData.about;
+        profileAvatar.style.backgroundImage = `url(${profileData.avatar})`;
+
+        cardData.forEach(function (card) {
+
+            const cardElement = createCard(card, deleteCard, likeCard, openImageFunc, userId);
+            placesList.append(cardElement);
+        });
+
+    })
+
+    .catch((error) => console.log("Ошибка бибка", error));
+
+function renderLoading(isLoading, button) {
+    if (isLoading) {
+        button.textContent = "Сохранение...";
+    } else {
+        button.textContent = button.dataset.buttonText;
+    }
+}
 
 function addCardToList(name, link) {
-    const card = createCard({name, link}, deleteCard, likeCard, openImageFunc);
+    const card = createCard({ name, link }, deleteCard, likeCard, openImageFunc, userId);
     placesList.prepend(card);
 };
 
@@ -48,8 +66,12 @@ profileEditButton.addEventListener('click', function () {
     openModal(popupEdit);
 });
 
-newCardButton.addEventListener('click', function (){
+newCardButton.addEventListener('click', function () {
     openModal(popupNewCard);
+});
+
+profileAvatar.addEventListener('click', function () {
+    openModal(popupEditAvatar);
 });
 
 function openImageFunc(evt) {
@@ -75,8 +97,34 @@ function handleCardFormSubmit(evt) {
     newCardForm.reset();
 };
 
+function handleFormSubmitAvatar(evt) {
+    evt.preventDefault();
+    renderLoading(true, popupAvatarButton);
+  
+    updateAvatar(avatarInput.value)
+      .then((res) => {
+        profileAvatar.style = `background-image: url('${res.avatar}')`;
+  
+        closePopup(popupEditAvatar);
+        avatarForm.reset();
+      })
+      .catch((err) => console.log(err))
+      .finally(() => {
+        renderLoading(false, popupAvatarButton);
+      });
+  }
+
+  avatarForm.addEventListener('submit', handleFormSubmitAvatar);
+  
+  // Слушатель клика по кнопке сохранения формы добавления аватара
+  
+
+popupEditAvatar.addEventListener('click', closeModalByClick);
 popupEdit.addEventListener('click', closeModalByClick);
 popupNewCard.addEventListener('click', closeModalByClick);
 imageModal.addEventListener('click', closeModalByClick);
 editProfileForm.addEventListener('submit', handleEditFormSubmit);
 newCardForm.addEventListener('submit', handleCardFormSubmit);
+
+
+enableValidation(validationConfig);
