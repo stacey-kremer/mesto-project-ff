@@ -9,15 +9,15 @@ export function closeModal(popup) {
   document.removeEventListener('keydown', closeModalOnEsc);
 };
 
-export function closeModalByClick(evt) {
-  if (evt.target.classList.contains('popup__close') || evt.target.classList.contains('popup_is-opened')) {
-      closeModal(evt.currentTarget);
-  }
-};
-
 function closeModalOnEsc(evt) {
   if (evt.key === 'Escape') {
       const popupElement = document.querySelector('.popup_is-opened');
       closeModal(popupElement);
+  }
+};
+
+export function closeModalByClick(evt) {
+  if (evt.target.classList.contains('popup__close') || evt.target.classList.contains('popup_is-opened')) {
+      closeModal(evt.currentTarget);
   }
 };
