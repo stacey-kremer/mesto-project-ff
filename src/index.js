@@ -35,7 +35,7 @@ let userId = '';
 Promise.all([getUserData(), getInitialCards()])
 
   .then(([profileData, cardData]) => {
-    const userId = profileData._id;
+    userId = profileData._id;
     profileName.textContent = profileData.name;
     profileDescription.textContent = profileData.about;
     profileAvatar.style = `background-image: url('${profileData.avatar}')`;
@@ -116,9 +116,9 @@ function handleEditFormSubmit(evt) {
     name: nameInput.value,
     about: descriptionInput.value,
   })
-    .then(() => {
-      profileName.textContent = nameInput.value;
-      profileDescription.textContent = descriptionInput.value;
+    .then((res) => {
+      profileName.textContent = res.name;
+      profileDescription.textContent = res.about;
       closeModal(popupEdit);
     })
     .catch((error) => {
